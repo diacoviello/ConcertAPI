@@ -184,7 +184,7 @@ function getDirections(event) {
   //   console.log()
   var mapsLink = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
 
-  mapsLink = mapsLink + latRet + "," + longRet + "&key=" + "myKey";
+  mapsLink = mapsLink + latRet + "," + longRet + "&key=" + myKey;
 
   fetch(mapsLink)
     .then(function (response) {
