@@ -26,6 +26,7 @@
 
 //https://rest.bandsintown.com/v4/artists/justin%20bieber/events/?app_id=codingbootcamp
 
+var myKey = config.MY_KEY;
 var resultTextEl = document.querySelector("#result-text");
 var resultContentEl = document.querySelector("#result-content");
 var searchFormEl = document.querySelector("#search-form");
@@ -171,7 +172,7 @@ function getDirections(event) {
   //     params: {
   //       latitude: latRet,
   //       longitude: longRet,
-  //       key: "AIzaSyCD-1NVl_YZVHBlWGXQUP5k899ykfBq4Do",
+  //       key: "myKey",
   //     },
   //   })
   //   .then(function (response) {
@@ -183,13 +184,7 @@ function getDirections(event) {
   //   console.log()
   var mapsLink = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
 
-  mapsLink =
-    mapsLink +
-    latRet +
-    "," +
-    longRet +
-    "&key=" +
-    "AIzaSyCD-1NVl_YZVHBlWGXQUP5k899ykfBq4Do";
+  mapsLink = mapsLink + latRet + "," + longRet + "&key=" + "myKey";
 
   fetch(mapsLink)
     .then(function (response) {
