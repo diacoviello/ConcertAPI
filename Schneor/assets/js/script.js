@@ -24,8 +24,9 @@
 //       console.log(data)
 //   });
 
-//https://rest.bandsintown.com/v4/artists/justin%20bieber/events/?app_id=codingbootcamp
-
+// https://rest.bandsintown.com/v4/artists/justin%20bieber/events/?app_id=codingbootcamp
+// rest.bandsintown.com/v4/artists/justin%20bieber/events/?app_id=codingbootcamp
+var joeKey = config.JOE_KEY;
 var myKey = config.MY_KEY;
 var resultTextEl = document.querySelector("#result-text");
 var resultContentEl = document.querySelector("#result-content");
@@ -46,13 +47,20 @@ function getParams() {
   searchApi(query);
 }
 
-function printResults(resultObj) {
-  console.log(resultObj);
+// let map;
 
-  // longitude = resultObj.venue.longitude;
-  // latitude = resultObj.venue.latitude;
-  // console.log(latitude);
-  // console.log(longitude);
+// function initMap() {
+//   var map = new google.maps.Map(document.getElementById("map"), {
+//     center: { lat: 42.56434, lng: -102.54563 },
+//     zoom: 8,
+//   });
+//   console.log(map);
+// }
+
+// initMap();
+
+function printResults(resultObj, index) {
+  console.log(resultObj);
 
   // set up `<div>` to hold result content
   var resultCard = document.createElement("div");
@@ -85,27 +93,105 @@ function printResults(resultObj) {
       "<strong>Description:</strong>  No description for this entry.";
   }
 
+  var longRet = parseFloat(dataLong);
+  var latRet = parseFloat(dataLat);
+  console.log(longRet);
+  console.log(latRet);
+
+  // write frunction to grab location in google api to map out lat long
+  var mapsLink = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
+
+  mapsLink = mapsLink + latRet + "," + longRet + "&key=" + myKey;
+  console.log(mapsLink);
+  fetch(mapsLink)
+    .then(function (response) {
+      if (!response.ok) {
+        throw response.json();
+      }
+
+      return response.json();
+    })
+    .then(function (mapRes) {
+      console.log(mapRes);
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
+
+  let map;
+  var mapDiv = document.createElement("div2");
+  mapDiv.classList.add("mapDiv");
+
+  mapDiv.setAttribute("id", "map" + index);
+  resultBody.append(mapDiv);
+
+  function initMap() {
+    var map = new google.maps.Map(document.getElementById("map" + index), {
+      center: { lat: latRet, lng: longRet },
+      zoom: 8,
+    });
+    console.log(map);
+  }
+
+  var newImg = document.createElement("img");
+  newImg.classList.add("img");
+  newImg.setAttribute(
+    "src",
+    "https://maps.googleapis.com/maps/api/staticmap?center=" +
+      latRet +
+      "," +
+      longRet +
+      "&zoom=18&size=550x550&maptype=terrain&key=" +
+      myKey
+  );
+  newImg.setAttribute("height", "300");
+  newImg.setAttribute("width", "300");
+  newImg.setAttribute("alt", "map");
+  resultBody.append(newImg);
+
   var linkButtonEl = document.createElement("a");
   linkButtonEl.textContent = "Read More";
   linkButtonEl.setAttribute("href", resultObj.url);
   linkButtonEl.classList.add("btn", "btn-dark");
 
-  resultBody.append(titleEl, bodyContentEl, linkButtonEl);
+  var directionsBtn = document.createElement("a");
+  directionsBtn.textContent = "Directions";
+  directionsBtn.setAttribute(
+    "href",
+    "https://www.google.com/maps/search/?api=1&query=" +
+      resultObj.venue.latitude +
+      "," +
+      resultObj.venue.longitude,
+    "_blank"
+  );
+  directionsBtn.classList.add("btn", "btn-dark");
+
+  resultBody.append(titleEl, bodyContentEl, linkButtonEl, directionsBtn);
 
   resultContentEl.append(resultCard);
+  console.log(resultObj.venue.longitude);
 
   dataLong = resultObj.venue.longitude;
   dataLat = resultObj.venue.latitude;
   console.log(dataLat);
   console.log(dataLong);
 
-  var directionsBtn = document.createElement("button");
-  directionsBtn.textContent = "Directions";
-  directionsBtn.setAttribute("dataLong", resultObj.venue.longitude);
-  directionsBtn.setAttribute("dataLat", resultObj.venue.latitude);
-  directionsBtn.classList.add("btn", "btn-dark");
-  directionsBtn.onclick = getDirections();
-  resultBody.append(directionsBtn);
+  function getDirections() {
+    var longRet = dataLong;
+    var latRet = dataLat;
+    console.log(longRet);
+    console.log(latRet);
+
+    window.open(
+      "https://www.google.com/maps/search/?api=1&query=" +
+        latRet +
+        "," +
+        longRet,
+      "_blank"
+    );
+  }
+
+  initMap();
 }
 
 function searchApi(query) {
@@ -115,7 +201,7 @@ function searchApi(query) {
   //     locQueryUrl = 'https://www.loc.gov/' + format + '/?fo=json';
   //   }
 
-  locQueryUrl = locQueryUrl + query + "/events/?app_id=codingbootcamp";
+  locQueryUrl = locQueryUrl + query + "/events/?app_id=" + joeKey;
 
   fetch(locQueryUrl)
     .then(function (response) {
@@ -139,7 +225,7 @@ function searchApi(query) {
       } else {
         resultContentEl.textContent = "";
         for (var i = 0; i < locRes.length; i++) {
-          printResults(locRes[i]);
+          printResults(locRes[i], i);
         }
       }
     })
@@ -152,7 +238,6 @@ function handleSearchFormSubmit(event) {
   event.preventDefault();
 
   var searchInputVal = document.querySelector("#search-input").value;
-  var formatInputVal = document.querySelector("#format-input").value;
 
   if (!searchInputVal) {
     console.error("You need a search input value!");
@@ -162,70 +247,8 @@ function handleSearchFormSubmit(event) {
   searchApi(searchInputVal);
 }
 
-function getDirections(event) {
-  var longRet = dataLong.toString();
-  var latRet = dataLat.toString();
-  console.log(longRet);
-  console.log(latRet);
-  // axios
-  //   .get("https://maps.googleapis.com/maps/api/geocode/json?latlng=", {
-  //     params: {
-  //       latitude: latRet,
-  //       longitude: longRet,
-  //       key: "myKey",
-  //     },
-  //   })
-  //   .then(function (response) {
-  //     console.log(response);
-  //   })
-  //   .catch(function (error) {
-  //     console.log(error);
-  //   });
-  //   console.log()
-  var mapsLink = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
-
-  mapsLink = mapsLink + latRet + "," + longRet + "&key=" + myKey;
-
-  fetch(mapsLink)
-    .then(function (response) {
-      if (!response.ok) {
-        throw response.json();
-      }
-
-      return response.json();
-    })
-    .then(function (mapRes) {
-      console.log(mapRes);
-
-      // write query to page so user knows what they are viewing
-      // resultTextEl.textContent = query;
-
-      // if (!mapRes.length) {
-      //   console.log("No results found!");
-      //   resultContentEl.innerHTML = "<h3>No results found, search again!</h3>";
-      // } else {
-      //   resultContentEl.textContent = "";
-      //   for (var i = 0; i < mapRes.length; i++) {
-      //     printResults(mapRes[i]);
-      //   }
-      // }
-    })
-    .catch(function (error) {
-      console.error(error);
-    });
-}
-
-let map;
-function initMap() {
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: latRet, lng: longRet },
-    zoom: 8,
-  });
-}
-
 searchFormEl.addEventListener("submit", handleSearchFormSubmit);
 
 getParams();
 
-getDirections();
-initMap();
+// getDirections();
