@@ -33,15 +33,7 @@ var resultContentEl = document.querySelector("#result-content");
 var searchFormEl = document.querySelector("#search-form");
 var dataLong = [];
 var dataLat = [];
-var thing = "";
 var artistCard = document.querySelector(".artistCard");
-
-// var newImg = document.createElement("img");
-//   newImg.classList.add("img");
-//   newImg.setAttribute("src", resultObj.artist.image_url);
-//   console.log(resultObj.artist.image_url);
-//   newImg.setAttribute("height", "300");
-//   newImg.setAttribute("width", "300");
 
 function getParams() {
   // Get the search params out of the URL (i.e. `?q=london&format=photo`) and convert it to an array (i.e. ['?q=london', 'format=photo'])
@@ -119,8 +111,6 @@ function printResults(resultObj) {
   console.log(longRet);
   console.log(latRet);
 
-  
-
   // write frunction to grab location in google api to map out lat long
   var mapsLink = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
 
@@ -147,6 +137,19 @@ function printResults(resultObj) {
 
   mapDiv.setAttribute("id", "map");
   resultBody.append(mapDiv);
+
+  // var newImg = document.createElement("img");
+  // newImg.classList.add("img");
+  // newImg.setAttribute(
+  //   "src",
+  //   "https://maps.googleapis.com/maps/api/staticmap?center=" +
+  //     resultObj.venue.latitude +
+  //     "," +
+  //     resultObj.venue.longitude +
+  //     "&zoom=18&size=550&maptype=terrain&key" +
+  //     myKey
+  // );
+  // console.log(resultObj.artist.image_url);
 
   // function initMap() {
   //   var map = new google.maps.Map(document.getElementById("map" + index), {
@@ -211,11 +214,16 @@ function printResults(resultObj) {
       "_blank"
     );
   }
+
+  //   imgUrl = resultObj.artist.image_url;
+  //   localStorage.setItem("imgLink", imgUrl);
+  //   console.log(imgUrl);
+  //   return imgUrl;
 }
 
-console.log(thing);
-
 function searchApi(query) {
+  artistCard.innerHTML = "";
+
   var locQueryUrl = "https://rest.bandsintown.com/v4/artists/";
 
   //   if (format) {
@@ -231,14 +239,20 @@ function searchApi(query) {
       }
 
       return response.json();
+      console.log(response);
     })
+
     .then(function (locRes) {
       console.log(locRes);
 
       // write query to page so user knows what they are viewing
       resultTextEl.textContent = query;
-
-      console.log(locRes);
+      var newImg = document.createElement("img");
+      newImg.classList.add("img");
+      newImg.setAttribute("src", locRes[0].artist.thumb_url);
+      artistCard.append(newImg);
+      // console.log(locRes.artist.thumb_url);
+      // console.log(locRes);
 
       if (!locRes.length) {
         console.log("No results found!");
