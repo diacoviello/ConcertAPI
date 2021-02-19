@@ -33,6 +33,11 @@
 var resultTextEl = document.querySelector('#result-text');
 var resultContentEl = document.querySelector('#result-content');
 var searchFormEl = document.querySelector('#search-form');
+var longitudeEl 
+var latitudeEl
+console.log(longitudeEl)
+console.log(latitudeEl)
+var joeKey = config.JOE_KEY
 
 function getParams() {
   // Get the search params out of the URL (i.e. `?q=london&format=photo`) and convert it to an array (i.e. ['?q=london', 'format=photo'])
@@ -47,9 +52,16 @@ console.log(query)
   searchApi(query);
 }
 
+
+
 function printResults(resultObj) {
   console.log(resultObj);
 
+  // longitudeEl = resultObj.venue.longitude;
+  // latitudeEl = resultObj.venue.latitude;
+  // console.log(longitudeEl)
+  // console.log(latitudeEl)
+ 
   // set up `<div>` to hold result content
   var resultCard = document.createElement('div');
   resultCard.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
@@ -81,6 +93,14 @@ function printResults(resultObj) {
       '<strong>Description:</strong>  No description for this entry.';
   }
 
+  if (result.results.address_components.formatted_address) {
+    bodyContentEl.innerHTML +=
+      '<strong>Address:</strong> ' + result.results.address_components.formatted_address;
+  } else {
+    bodyContentEl.innerHTML +=
+      '<strong>Description:</strong>  No description for this entry.';
+  }
+  console.log(result.results.address_components.formatted_address)
   var linkButtonEl = document.createElement('a');
   linkButtonEl.textContent = 'Read More';
   linkButtonEl.setAttribute('href', resultObj.url);
@@ -89,7 +109,14 @@ function printResults(resultObj) {
   resultBody.append(titleEl, bodyContentEl, linkButtonEl);
 
   resultContentEl.append(resultCard);
+
+  //   var longitudeEl = longitudeTemp;
+  //   var latitudeEl = latitudeTemp;
+  //   console.log(longitudeEl);
+  //   console.log(latitudeEl);
 }
+
+
 
 function searchApi(query) {
   var locQueryUrl = 'https://rest.bandsintown.com/v4/artists/';
@@ -98,7 +125,7 @@ function searchApi(query) {
 //     locQueryUrl = 'https://www.loc.gov/' + format + '/?fo=json';
 //   }
 
-  locQueryUrl = locQueryUrl + query + '/events/?app_id=codingbootcamp';
+  locQueryUrl = locQueryUrl + query + '/events/?app_id=' + joeKey;
 
   fetch(locQueryUrl)
     .then(function (response) {
@@ -129,10 +156,62 @@ function searchApi(query) {
     .catch(function (error) {
       console.error(error);
     });
+    searchAddress()
+}
+
+function searchAddress() {
+
+  var addQueryUrl = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=36.103008,-115.178196';
+
+//   if (format) {
+//     locQueryUrl = 'https://www.loc.gov/' + format + '/?fo=json';
+//   }
+
+  addQueryUrl = addQueryUrl + '&key=AIzaSyCD-1NVl_YZVHBlWGXQUP5k899ykfBq4Do';
+  console.log(addQueryUrl)
+  console.log(latitudeEl)
+  console.log(longitudeEl)
+
+  fetch(addQueryUrl)
+    .then(function (response) {
+      if (!response.ok) {
+        throw response.json();
+      }
+
+      return response.json();
+  })
+  .then(function (locRes) {
+      console.log(locRes);
+        
+      // write query to page so user knows what they are viewing
+      // resultTextEl.textContent = query;
+
+      // console.log(locRes);
+
+      // if (!result.length) {
+      //   console.log('No results found!');
+      //   // resultContentEl.innerHTML = '<h3>No results found, search again!</h3>';
+      // } else {
+      //   // resultContentEl.textContent = '';
+      //   for (var i = 0; i < result.length; i++) {
+          printResults(locRes);
+        
+      
+  })
+  .catch(function (error) {
+      console.error(error);
+  });
+
 }
 
 function handleSearchFormSubmit(event) {
   event.preventDefault();
+
+
+
+
+// function handleSearchFormSubmit(event) {
+//   event.preventDefault();
 
   var searchInputVal = document.querySelector('#search-input').value;
 //   var formatInputVal = document.querySelector('#format-input').value;
