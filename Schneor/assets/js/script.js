@@ -33,6 +33,15 @@ var resultContentEl = document.querySelector("#result-content");
 var searchFormEl = document.querySelector("#search-form");
 var dataLong = [];
 var dataLat = [];
+var thing = "";
+var artistCard = document.querySelector(".artistCard");
+
+// var newImg = document.createElement("img");
+//   newImg.classList.add("img");
+//   newImg.setAttribute("src", resultObj.artist.image_url);
+//   console.log(resultObj.artist.image_url);
+//   newImg.setAttribute("height", "300");
+//   newImg.setAttribute("width", "300");
 
 function getParams() {
   // Get the search params out of the URL (i.e. `?q=london&format=photo`) and convert it to an array (i.e. ['?q=london', 'format=photo'])
@@ -59,8 +68,10 @@ function getParams() {
 
 // initMap();
 
-function printResults(resultObj, index) {
+function printResults(resultObj) {
   console.log(resultObj);
+
+  resultTextEl.textContent = resultObj.lineup;
 
   // set up `<div>` to hold result content
   var resultCard = document.createElement("div");
@@ -71,11 +82,21 @@ function printResults(resultObj, index) {
   resultCard.append(resultBody);
 
   var titleEl = document.createElement("h3");
-  titleEl.textContent = resultObj.lineup;
+  titleEl.textContent = resultObj.venue.name + "," + resultObj.venue.location;
+
+  var time = resultObj.datetime.slice(11, 16);
+  console.log(time);
+  var date = resultObj.datetime.slice(0, 10);
+  console.log(date);
 
   var bodyContentEl = document.createElement("p");
   bodyContentEl.innerHTML =
-    "<strong>Date:</strong> " + resultObj.datetime + "<br/>";
+    "<strong>Date:</strong> " +
+    date +
+    "<br />" +
+    "<strong>Time</strong>" +
+    time +
+    "<br />";
 
   if (resultObj.venue.location) {
     bodyContentEl.innerHTML +=
@@ -98,61 +119,60 @@ function printResults(resultObj, index) {
   console.log(longRet);
   console.log(latRet);
 
+  
+
   // write frunction to grab location in google api to map out lat long
   var mapsLink = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
 
   mapsLink = mapsLink + latRet + "," + longRet + "&key=" + myKey;
   console.log(mapsLink);
-  fetch(mapsLink)
-    .then(function (response) {
-      if (!response.ok) {
-        throw response.json();
-      }
+  // fetch(mapsLink)
+  //   .then(function (response) {
+  //     if (!response.ok) {
+  //       throw response.json();
+  //     }
 
-      return response.json();
-    })
-    .then(function (mapRes) {
-      console.log(mapRes);
-    })
-    .catch(function (error) {
-      console.error(error);
-    });
+  //     return response.json();
+  //   })
+  //   .then(function (mapRes) {
+  //     console.log(mapRes);
+  //   })
+  //   .catch(function (error) {
+  //     console.error(error);
+  //   });
 
   let map;
-  var mapDiv = document.createElement("div2");
+  var mapDiv = document.createElement("div");
   mapDiv.classList.add("mapDiv");
 
-  mapDiv.setAttribute("id", "map" + index);
+  mapDiv.setAttribute("id", "map");
   resultBody.append(mapDiv);
 
-  function initMap() {
-    var map = new google.maps.Map(document.getElementById("map" + index), {
-      center: { lat: latRet, lng: longRet },
-      zoom: 8,
-    });
-    console.log(map);
-  }
+  // function initMap() {
+  //   var map = new google.maps.Map(document.getElementById("map" + index), {
+  //     center: { lat: resultObj.venue.latitude, lng: resultObj.venue.longitude },
+  //     zoom: 8,
+  //   });
+  //   console.log(map);
+  // }
 
-  var newImg = document.createElement("img");
-  newImg.classList.add("img");
-  newImg.setAttribute(
-    "src",
-    "https://maps.googleapis.com/maps/api/staticmap?center=" +
-      latRet +
-      "," +
-      longRet +
-      "&zoom=18&size=550x550&maptype=terrain&key=" +
-      myKey
-  );
-  newImg.setAttribute("height", "300");
-  newImg.setAttribute("width", "300");
-  newImg.setAttribute("alt", "map");
-  resultBody.append(newImg);
+  // function myMap() {
+  //   var mapProp = {
+  //     center: new google.maps.LatLng(
+  //       resultObj.venue.latitude,
+  //       resultObj.venue.longitude
+  //     ),
+  //     zoom: 18,
+  //   };
+  //   var map = new google.maps.Map(document.getElementById("map"), mapProp);
+  //   return map;
+  // }
 
   var linkButtonEl = document.createElement("a");
   linkButtonEl.textContent = "Read More";
   linkButtonEl.setAttribute("href", resultObj.url);
   linkButtonEl.classList.add("btn", "btn-dark");
+  linkButtonEl.setAttribute("target", "_blank");
 
   var directionsBtn = document.createElement("a");
   directionsBtn.textContent = "Directions";
@@ -165,6 +185,7 @@ function printResults(resultObj, index) {
     "_blank"
   );
   directionsBtn.classList.add("btn", "btn-dark");
+  directionsBtn.setAttribute("target", "_blank");
 
   resultBody.append(titleEl, bodyContentEl, linkButtonEl, directionsBtn);
 
@@ -190,9 +211,9 @@ function printResults(resultObj, index) {
       "_blank"
     );
   }
-
-  initMap();
 }
+
+console.log(thing);
 
 function searchApi(query) {
   var locQueryUrl = "https://rest.bandsintown.com/v4/artists/";
@@ -225,7 +246,7 @@ function searchApi(query) {
       } else {
         resultContentEl.textContent = "";
         for (var i = 0; i < locRes.length; i++) {
-          printResults(locRes[i], i);
+          printResults(locRes[i]);
         }
       }
     })
