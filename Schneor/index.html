@@ -8,59 +8,92 @@
       href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400&family=Merriweather:wght@700&display=swap"
       rel="stylesheet"
     />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+      integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+      crossorigin="anonymous"
+    ></script>
+
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
+
     <!-- <link rel="stylesheet" href="./assets/css/jass.css" /> -->
     <!-- <link rel="stylesheet" href="./assets/css/style.css" /> -->
   </head>
 
   <body>
-    <div class="row">
-      <div class="col s12 flex-column justify-center">
-        <h1 class="center-align">Concert search engine</h1>
+    <!-- <div
+      class="valign-wrapper"
+      style="width: 100%; height: 100%; position: absolute"
+    >
+      <div class="row">
+        <div class="card-image">
+          <img src="assets/js/images/MSG_SEA.jpg" />
+          <span class="card-title"><h1>Concert Finder</h1></span>
+        </div>
+        <div class="row">
+          <div class="col s12">
+            <div class="center-align">
+              <br />
+
+              <br />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <form id="search-form" class="">
+            <input
+              id="search-input"
+              class="col s4 offset-s4 center-align"
+              type="text"
+              placeholder="Search!"
+            />
+            <button class="btn btn-info btn-block col s4 offset-s4">
+              Click Me
+            </button>
+          </form>
+        </div>
+      </div>
+    </div> -->
+    <div
+      class="valign-wrapper"
+      style="width: 100%; height: 100%; position: absolute"
+    >
+      <div class="row">
+        <div class="col s12 m12">
+          <div class="card center-align">
+            <div class="card-image">
+              <img src="assets/js/images/MSG_SEA.jpg" />
+              <div class="card-title">
+                <h1 class="center-align">Concert Finder
+                </div>
+            </div>
+            <div class="card-content">
+              <p>
+                <div class="row">
+          <form id="search-form" class="">
+            <input
+              id="search-input"
+              class="col s4 offset-s4 center-align"
+              type="text"
+              placeholder="Enter a musical artist's name"
+            />
+            <button class="btn btn-info btn-block col s4 offset-s4">
+              Show me shows! 
+            </button>
+          </form>
+        </div>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <form id="search-form" class="">
-      <div class="row">
-        <input
-          id="search-input"
-          class="col s4 offset-s4 center-align"
-          type="text"
-          placeholder="Search!"
-        />
-      </div>
-      <div class="row">
-        <div class="input-field col s12">
-          <select>
-            <option value="" disabled selected>Choos your option</option>
-            <option value="1">artist</option>
-            <option value="2">location</option>
-
-            <!-- id="format-input" class="form-input w-100 col s12"> -->
-            <option value="" disabled selected>Select a format...</option>
-            <option value="1">Maps</option>
-            <option value="2">Audio</option>
-            <option value="photos">Photos</option>
-            <option value="manuscripts">Manuscripts</option>
-            <option value="newspapers">Newspapers</option>
-            <option value="film-and-videos">Film and Videos</option>
-            <option value="notated-music">Notated Music</option>
-            <option value="websites">Websites</option>
-          </select>
-        </div>
-      </div>
-      <div class="row">
-        <button
-          class="col s2 offset-s5 justify-centercard-panel teal lighten-2 waves-affect waves-light btn-large"
-        >
-          Click Me
-        </button>
-      </div>
-    </form>
-
+    <script src="config.js"></script>
     <script src="assets/js/index.js"></script>
+    
   </body>
 </html>
