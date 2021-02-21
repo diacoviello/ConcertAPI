@@ -1,31 +1,3 @@
-// curl -X GET "https://api.predicthq.com/v1/events/" \
-// -H "Authorization: Bearer $ACCESS_TOKEN"
-
-// var url = "https://api.predicthq.com/v1/events/?q=jazz/";
-
-// fetch(url, {
-//     method: 'GET', // *GET, POST, PUT, DELETE, etc.
-//     mode: 'cors', // no-cors, *cors, same-origin
-//     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-//     credentials: 'same-origin', // include, *same-origin, omit
-//     headers: {
-//         'Authorization':  'Bearer rke5JTFo7dRjOITRR8bPHNg5L_gb8ili9kKKaVJM'
-//     //   'Content-Type': 'application/json'
-//       // 'Content-Type': 'application/x-www-form-urlencoded',
-//     },
-//     // redirect: 'follow', // manual, *follow, error
-//     // referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-//     // body: JSON.stringify(data) // body data type must match "Content-Type" header
-//   })
-//   .then(function(respons){
-//     return respons.json();
-//   })
-//   .then(function(data){
-//       console.log(data)
-//   });
-
-// https://rest.bandsintown.com/v4/artists/justin%20bieber/events/?app_id=codingbootcamp
-// rest.bandsintown.com/v4/artists/justin%20bieber/events/?app_id=codingbootcamp
 var joeKey = config.JOE_KEY;
 var myKey = config.MY_KEY;
 var resultTextEl = document.querySelector("#result-text");
@@ -42,23 +14,10 @@ function getParams() {
 
   // Get the query and format values
   var query = searchParamsArr.split("=").pop();
-  //   var format = searchParamsArr[1].split('=').pop();
   console.log(query);
 
   searchApi(query);
 }
-
-// let map;
-
-// function initMap() {
-//   var map = new google.maps.Map(document.getElementById("map"), {
-//     center: { lat: 42.56434, lng: -102.54563 },
-//     zoom: 8,
-//   });
-//   console.log(map);
-// }
-
-// initMap();
 
 function printResults(resultObj) {
   console.log(resultObj);
@@ -74,7 +33,7 @@ function printResults(resultObj) {
   resultCard.append(resultBody);
 
   var titleEl = document.createElement("h3");
-  titleEl.textContent = resultObj.venue.name + "," + resultObj.venue.location;
+  titleEl.textContent = resultObj.venue.name + ", " + resultObj.venue.location;
 
   var time = resultObj.datetime.slice(11, 16);
   console.log(time);
@@ -83,10 +42,10 @@ function printResults(resultObj) {
 
   var bodyContentEl = document.createElement("p");
   bodyContentEl.innerHTML =
-    "<strong>Date:</strong> " +
+    "<strong>Date: </strong> " +
     date +
     "<br />" +
-    "<strong>Time</strong>" +
+    "<strong>Time: </strong>" +
     time +
     "<br />";
 
@@ -116,20 +75,6 @@ function printResults(resultObj) {
 
   mapsLink = mapsLink + latRet + "," + longRet + "&key=" + myKey;
   console.log(mapsLink);
-  // fetch(mapsLink)
-  //   .then(function (response) {
-  //     if (!response.ok) {
-  //       throw response.json();
-  //     }
-
-  //     return response.json();
-  //   })
-  //   .then(function (mapRes) {
-  //     console.log(mapRes);
-  //   })
-  //   .catch(function (error) {
-  //     console.error(error);
-  //   });
 
   let map;
   var mapDiv = document.createElement("div");
@@ -138,43 +83,11 @@ function printResults(resultObj) {
   mapDiv.setAttribute("id", "map");
   resultBody.append(mapDiv);
 
-  // var newImg = document.createElement("img");
-  // newImg.classList.add("img");
-  // newImg.setAttribute(
-  //   "src",
-  //   "https://maps.googleapis.com/maps/api/staticmap?center=" +
-  //     resultObj.venue.latitude +
-  //     "," +
-  //     resultObj.venue.longitude +
-  //     "&zoom=18&size=550&maptype=terrain&key" +
-  //     myKey
-  // );
-  // console.log(resultObj.artist.image_url);
-
-  // function initMap() {
-  //   var map = new google.maps.Map(document.getElementById("map" + index), {
-  //     center: { lat: resultObj.venue.latitude, lng: resultObj.venue.longitude },
-  //     zoom: 8,
-  //   });
-  //   console.log(map);
-  // }
-
-  // function myMap() {
-  //   var mapProp = {
-  //     center: new google.maps.LatLng(
-  //       resultObj.venue.latitude,
-  //       resultObj.venue.longitude
-  //     ),
-  //     zoom: 18,
-  //   };
-  //   var map = new google.maps.Map(document.getElementById("map"), mapProp);
-  //   return map;
-  // }
-
   var linkButtonEl = document.createElement("a");
   linkButtonEl.textContent = "Read More";
   linkButtonEl.setAttribute("href", resultObj.url);
   linkButtonEl.classList.add("btn", "btn-dark");
+
   linkButtonEl.setAttribute("target", "_blank");
 
   var directionsBtn = document.createElement("a");
@@ -214,21 +127,12 @@ function printResults(resultObj) {
       "_blank"
     );
   }
-
-  //   imgUrl = resultObj.artist.image_url;
-  //   localStorage.setItem("imgLink", imgUrl);
-  //   console.log(imgUrl);
-  //   return imgUrl;
 }
 
 function searchApi(query) {
   artistCard.innerHTML = "";
 
   var locQueryUrl = "https://rest.bandsintown.com/v4/artists/";
-
-  //   if (format) {
-  //     locQueryUrl = 'https://www.loc.gov/' + format + '/?fo=json';
-  //   }
 
   locQueryUrl = locQueryUrl + query + "/events/?app_id=" + joeKey;
 
@@ -251,8 +155,6 @@ function searchApi(query) {
       newImg.classList.add("img");
       newImg.setAttribute("src", locRes[0].artist.thumb_url);
       artistCard.append(newImg);
-      // console.log(locRes.artist.thumb_url);
-      // console.log(locRes);
 
       if (!locRes.length) {
         console.log("No results found!");
@@ -285,5 +187,3 @@ function handleSearchFormSubmit(event) {
 searchFormEl.addEventListener("submit", handleSearchFormSubmit);
 
 getParams();
-
-// getDirections();
