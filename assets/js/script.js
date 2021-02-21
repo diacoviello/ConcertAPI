@@ -68,13 +68,6 @@ function printResults(resultObj) {
   mapsLink = mapsLink + latRet + "," + longRet + "&key=" + myKey;
   console.log(mapsLink);
 
-  let map;
-  var mapDiv = document.createElement("div");
-  mapDiv.classList.add("mapDiv");
-
-  mapDiv.setAttribute("id", "map");
-  resultBody.append(mapDiv);
-
   var linkButtonEl = document.createElement("a");
   linkButtonEl.textContent = "Read More";
   linkButtonEl.setAttribute("href", resultObj.url);
