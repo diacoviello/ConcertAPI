@@ -33,7 +33,7 @@ function printResults(resultObj) {
   resultCard.append(resultBody);
 
   var titleEl = document.createElement("h3");
-  titleEl.textContent = resultObj.venue.name + ", " + resultObj.venue.location;
+  titleEl.textContent = resultObj.venue.name;
 
   var time = resultObj.datetime.slice(11, 16);
   console.log(time);
@@ -55,14 +55,6 @@ function printResults(resultObj) {
   } else {
     bodyContentEl.innerHTML +=
       "<strong>Subjects:</strong> No subject for this entry.";
-  }
-
-  if (resultObj.venue.name) {
-    bodyContentEl.innerHTML +=
-      "<strong>Venue name:</strong> " + resultObj.venue.name;
-  } else {
-    bodyContentEl.innerHTML +=
-      "<strong>Description:</strong>  No description for this entry.";
   }
 
   var longRet = parseFloat(dataLong);
