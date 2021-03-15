@@ -67,6 +67,7 @@ function printResults(resultObj, index) {
   // console.log(longitudeEl)
   // console.log(latitudeEl)
  
+ 
   // set up `<div>` to hold result content
   var resultCard = document.createElement("div");
   resultCard.classList.add("card", "bg-light", "text-dark", "mb-3", "p-3");
@@ -76,11 +77,18 @@ function printResults(resultObj, index) {
   resultCard.append(resultBody);
 
   var titleEl = document.createElement("h3");
-  titleEl.textContent = resultObj.lineup;
-
+  titleEl.textContent = resultObj.venue.name + ", " + resultObj.venue.location;
+  
+  var time = resultObj.datetime.slice(11, 16)
+    console.log(time)
+    var date = resultObj.datetime.slice(0, 10)
+    console.log(date)
   var bodyContentEl = document.createElement("p");
   bodyContentEl.innerHTML =
-    "<strong>Date:</strong> " + resultObj.datetime + "<br/>";
+    "<strong>Date:</strong> " + date + "<br/>" + " <strong>Time:</strong> " + time + "<br/>";
+    console.log(resultObj.datetime)
+    
+    
 
   if (resultObj.venue.location) {
     bodyContentEl.innerHTML +=
@@ -152,7 +160,7 @@ function printResults(resultObj, index) {
   newImg.setAttribute("height", "300");
   newImg.setAttribute("width", "300");
   newImg.setAttribute("alt", "map");
-  resultBody.append(newImg);
+  resultCard.append(newImg);
 
   var linkButtonEl = document.createElement("a");
   linkButtonEl.textContent = "Read More";
